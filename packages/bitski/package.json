@@ -1,0 +1,36 @@
+{
+  "name": "@web3-react/bitski-wallet",
+  "keywords": [
+    "web3-react",
+    "bitski-wallet"
+  ],
+  "author": "Himanshu Devrani <himanshudevrani333h@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "repository": "github:Uniswap/web3-react",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "8.0.34-beta.0",
+  "files": [
+    "dist/*"
+  ],
+  "type": "commonjs",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "exports": "./dist/index.js",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc",
+    "start": "tsc --watch"
+  },
+  "dependencies": {
+    "@web3-react/types": "^8.0.20-beta.0",
+    "bitski": "^3.1.0"
+  },
+  "peerDependencies": {
+    "@coinbase/wallet-sdk": "^3.0.4"
+  },
+  "devDependencies": {
+    "@web3-react/store": "^8.0.25-beta.0"
+  }
+}
