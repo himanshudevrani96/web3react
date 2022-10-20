@@ -64,7 +64,7 @@ export function getSelectedConnector(
   ...initializedConnectors: [Connector, Web3ReactHooks][] | [Connector, Web3ReactHooks, Web3ReactStore][]
 ) {
   function getIndex(connector: Connector) {
-    const index = initializedConnectors.findIndex(([initializedConnector]: any) => connector === initializedConnector)
+    const index = initializedConnectors.findIndex(([initializedConnector]) => connector === initializedConnector)
     if (index === -1) throw new Error('Connector not found')
     return index
   }
@@ -79,31 +79,31 @@ export function getSelectedConnector(
   // this is ok, though, because initializedConnectors never changes, so the same hooks are called each time
   function useSelectedChainId(connector: Connector) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useChainId }]: any) => useChainId())
+    const values = initializedConnectors.map(([, { useChainId }]) => useChainId())
     return values[getIndex(connector)]
   }
 
   function useSelectedAccounts(connector: Connector) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useAccounts }]: any) => useAccounts())
+    const values = initializedConnectors.map(([, { useAccounts }]) => useAccounts())
     return values[getIndex(connector)]
   }
 
   function useSelectedIsActivating(connector: Connector) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useIsActivating }]: any) => useIsActivating())
+    const values = initializedConnectors.map(([, { useIsActivating }]) => useIsActivating())
     return values[getIndex(connector)]
   }
 
   function useSelectedAccount(connector: Connector) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useAccount }]: any) => useAccount())
+    const values = initializedConnectors.map(([, { useAccount }]) => useAccount())
     return values[getIndex(connector)]
   }
 
   function useSelectedIsActive(connector: Connector) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useIsActive }]: any) => useIsActive())
+    const values = initializedConnectors.map(([, { useIsActive }]) => useIsActive())
     return values[getIndex(connector)]
   }
 
@@ -118,13 +118,13 @@ export function getSelectedConnector(
   ): T | undefined {
     const index = getIndex(connector)
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useProvider }]: any, i: any) => useProvider<T>(network, i === index))
+    const values = initializedConnectors.map(([, { useProvider }], i) => useProvider<T>(network, i === index))
     return values[index]
   }
 
   function useSelectedENSNames(connector: Connector, provider?: BaseProvider) {
     const index = getIndex(connector)
-    const values = initializedConnectors.map(([, { useENSNames }]: any, i) =>
+    const values = initializedConnectors.map(([, { useENSNames }], i) =>
       // eslint-disable-next-line react-hooks/rules-of-hooks
       useENSNames(i === index ? provider : undefined)
     )
@@ -134,7 +134,7 @@ export function getSelectedConnector(
   function useSelectedENSName(connector: Connector, provider?: BaseProvider) {
     const index = getIndex(connector)
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useENSName }]: any, i) => useENSName(i === index ? provider : undefined))
+    const values = initializedConnectors.map(([, { useENSName }], i) => useENSName(i === index ? provider : undefined))
     return values[index]
   }
 
@@ -175,7 +175,7 @@ export function getPriorityConnector(
 
   function usePriorityConnector() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const values = initializedConnectors.map(([, { useIsActive }]: any) => useIsActive())
+    const values = initializedConnectors.map(([, { useIsActive }]) => useIsActive())
     const index = values.findIndex((isActive) => isActive)
     return initializedConnectors[index === -1 ? 0 : index][0]
   }
