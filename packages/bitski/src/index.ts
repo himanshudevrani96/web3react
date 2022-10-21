@@ -41,7 +41,6 @@ function parseChainId(chainId: string | number) {
 export interface BitskiConstructorArgs {
   actions: Actions
   options?: BitskiSDKOptions
-  onError?: (error: Error) => void
 }
 
 export class BitskiConnect extends Connector {
@@ -49,11 +48,10 @@ export class BitskiConnect extends Connector {
   public provider?: BitskiProvider | any
   private readonly options: BitskiSDKOptions | any
   private eagerConnection?: Promise<void>
-
   public bitskiWallet: BitskiSDKOptions | undefined
 
-  constructor({ actions, options, onError }: BitskiConstructorArgs) {
-    super(actions, onError)
+  constructor({ actions, options }: BitskiConstructorArgs) {
+    super(actions)
     this.options = options
   }
   public bitski: any
@@ -72,11 +70,11 @@ export class BitskiConnect extends Connector {
         rpcUrl: 'https://matic-mumbai.chainstacklabs.com',
         chainId: 80001,
       }
-      this.bitski = new Bitski('a1d57ae2-3404-49dc-a848-edc39463c4fc', 'https://localhost/3000');
+      this.bitski = new Bitski('a1d57ae2-3404-49dc-a848-edc39463c4fc', 'https://curvy-rabbits-cough-122-161-64-101.loca.lt/callback', ['offline', 'email']);
       // const provider = await m.default(this.options)
       // const { url, ...options } = this.options
       // this.bitskiWallet = new m.default(options)
-      this.provider = this.bitski.getProvider({network: network})
+      this.provider = this.bitski.getProvider()
       console.log(this.provider, "//");
 
       // if (provider) {
@@ -91,20 +89,20 @@ export class BitskiConnect extends Connector {
 
       //       })
 
+      // Bitski.callback()/
       // Bitski.callback()
       // window.location = <Callback/>
       this.bitski.signIn().then((e: any) => {
-        console.log({ e });
-
+        console.log("after signin",{ e });
+        this.actions.update({ accounts: e.accounts, chainId: parseChainId(this.provider.currentChainId)})
       }).catch((error: any) => {
         if (error.code === AuthenticationErrorCode.UserCancelled) {
           // ignore error
         } else {
-          console.log("err", error);
         }
         console.log("err", error);
-
       });
+      
       //       this.provider.on('connect', ({ chainId }: ProviderConnectInfo): void => {
       //         // bitski.signIn()
       //         // this.bitski.signIn()
@@ -161,12 +159,12 @@ export class BitskiConnect extends Connector {
 
   /**
    * Initiates a connection.
-   *
    * @param desiredChainIdOrChainParameters - If defined, indicates the desired chain to connect to. If the user is
    * already connected to this chain, no additional steps will be taken. Otherwise, the user will be prompted to switch
    * to the chain, if one of two conditions is met: either they already have it added in their extension, or the
    * argument is of type AddEthereumChainParameter, in which case the user will be prompted to add the chain with the
    * specified parameters first, before being prompted to switch.
+   * @param bitskiConfig
    */
   public async activate(desiredChainIdOrChainParameters?: number | AddEthereumChainParameter): Promise<void> {
 
